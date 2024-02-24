@@ -1,0 +1,21 @@
+{
+  "name": "whatsapp-web-js-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node .",
+    "dev": "nodemon ."
+  },
+  "author": "felixsinggih",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "qrcode-terminal": "^0.12.0",
+    "socket.io": "^4.7.4",
+    "whatsapp-web.js": "^1.23.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

@@ -37,9 +37,29 @@ const createWhatsappSession = (id, socket) => {
         // qrcode.generate(qr, { small: true });
     });
 
-    client.on('authenticated', (session) => {
-        console.log('AUTHENTICATED', session);
+    client.on('authenticated', () => {
+        console.log('AUTHENTICATED');
+
+        socket.emit('authenticated', { message: 'Client is authenticated' });
     });
+
+    client.on('auth_failure', () => {
+        console.log('AUTH FAILURE');
+    });
+
+    client.on('disconnected', (reason) => {
+        console.log('Client was logged out', reason);
+    });
+
+    socket.on('sendMessage', async (data) => {
+        try {
+            console.log(data)
+            await client.sendMessage(data.number, data.message)
+        } catch (e) {
+            console.log(e)
+        }
+
+    })
 
     client.on('ready', () => {
         console.log('Client is ready');

@@ -8,8 +8,8 @@ const socket = io("http://localhost:3000", {})
 function App() {
   const [session, setSession] = useState('');
   const [qrCode, setQrCode] = useState('');
-  const [number, setNumber] = useState('6285156613166@c.us')
-  const [message, setMessage] = useState('Hello, from whatsapp server')
+  const [number, setNumber] = useState('')
+  const [message, setMessage] = useState('')
 
   useEffect(() => {
     socket.emit('connected', 'Hello from client');
@@ -33,31 +33,48 @@ function App() {
   }
 
   const sendMessage = () => {
-    socket.emit('sendMessage', { number: number, message: message });
+    let newNumber = ''
+    number.startsWith('0') ? newNumber = `62${number.slice(1)}@c.us` : newNumber = `${number}@c.us`
+
+    socket.emit('sendMessage', { number: newNumber, message: message });
   }
 
   return (
     <>
-      <h2>WhatsApp Web Js</h2>
+      <h1 className='text-3xl font-bold text-center mb-6'>WhatsApp Web Js</h1>
 
-      <h2>QR Code</h2>
+      <div className='text-center max-w-sm mx-auto mb-4'>
+        <h2 className='text-xl font-semibold mb-4'>Enter Your ID to start the session</h2>
 
-      <div style={{ marginBottom: 10 }}>
-        <input type="text" value={session} onChange={(e) => setSession(e.target.value)} />
+        <div className='flex items-center space-x-2'>
+          <input type="text" value={session} onChange={(e) => setSession(e.target.value)}
+            className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 inline-block w-full p-2' />
 
-        <button onClick={createSessionForWhatsapp}>Create Session</button>
+          <button onClick={createSessionForWhatsapp}
+            className='text-white w-52 bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 font-medium rounded text-sm p-2'>
+            Create Session
+          </button>
+        </div>
       </div>
 
-      <div style={{ padding: 20, backgroundColor: 'white' }}>
-        <QRCode value={qrCode} />
+      <div className='text-center mb-4'>
+        <h2 className='text-xl font-semibold mb-4'>Scan barcode to start the session</h2>
+
+        <QRCode value={qrCode}
+          className='inline-block p-5 bg-white rounded' />
       </div>
 
-      <div style={{ marginTop: 10 }}>
-        <input type="text" value={number} onChange={(e) => setNumber(e.target.value)} />
+      <div className='text-center'>
+        <input type="text" value={number} onChange={(e) => setNumber(e.target.value)}
+          className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 inline-block w-full p-2 mb-2' placeholder='Phone number' />
 
-        <input type="text" value={message} onChange={(e) => setMessage(e.target.value)} />
+        <textarea value={message} onChange={(e) => setMessage(e.target.value)}
+          className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 inline-block w-full p-2 mb-2' placeholder='Message' />
 
-        <button onClick={sendMessage}>Send Message</button>
+        <button onClick={sendMessage}
+          className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 font-medium rounded text-sm p-2'>
+          Send Message
+        </button>
       </div>
     </>
   )

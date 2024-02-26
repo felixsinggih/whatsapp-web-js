@@ -63,8 +63,20 @@ const createWhatsappSession = (id, socket) => {
 
     socket.on('sendMessage', async (data) => {
         try {
-            console.log(data)
-            await client.sendMessage(data.number, data.message)
+            // console.log(data)
+            const { number, message } = data;
+
+            let formatedNumber = ''
+            number.startsWith('0') ? formatedNumber = `62${number.slice(1)}@c.us` : formatedNumber = `${number}@c.us`
+
+            const user = await client.isRegisteredUser(formatedNumber)
+
+            if (!user) {
+                console.log('User not registered')
+                return
+            }
+
+            await client.sendMessage(formatedNumber, message)
         } catch (e) {
             console.log(e)
         }

@@ -35,6 +35,7 @@ function App() {
     socket.on('ready', (data) => {
       console.log('READY', data);
       setQrCode('');
+      setLoading(false);
       setReady(true);
     })
   }, [])
@@ -46,10 +47,7 @@ function App() {
   }
 
   const sendMessage = () => {
-    let newNumber = ''
-    number.startsWith('0') ? newNumber = `62${number.slice(1)}@c.us` : newNumber = `${number}@c.us`
-
-    socket.emit('sendMessage', { number: newNumber, message: message });
+    socket.emit('sendMessage', { number: number, message: message });
   }
 
   return (
@@ -105,7 +103,7 @@ function App() {
             Send Message
           </button>
         </div>
-      }
+      // {/* } */}
     </>
   )
 }

@@ -42,7 +42,7 @@ const createWhatsappSession = (id, socket) => {
     });
 
     client.on('qr', (qr) => {
-        console.log('QR RECEIVED', qr);
+        console.log('QR SEND', qr);
         socket.emit('qrSend', { qr });
         // qrcode.generate(qr, { small: true });
     });
@@ -95,6 +95,9 @@ io.on('connection', (socket) => {
     socket.on('createSession', (data) => {
         console.log(data);
         const { id } = data;
+
+        socket.emit('createSession', { id, message: 'Creating session' })
+
         createWhatsappSession(id, socket);
     });
 });

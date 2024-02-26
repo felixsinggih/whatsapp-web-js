@@ -28,6 +28,11 @@ function App() {
       setLoading(false);
     })
 
+    socket.on('connectionFailed', () => {
+      setQrCode('');
+      setLoading(false);
+    })
+
     socket.on('authenticated', (data) => {
       console.log('AUTHENTICATED', data);
     })
@@ -36,6 +41,11 @@ function App() {
       console.log('READY', data);
       setQrCode('');
       setLoading(false);
+      setReady(true);
+    })
+
+    socket.on('sessionExist', (data) => {
+      console.log('SESSION EXIST', data);
       setReady(true);
     })
   }, [])
@@ -47,7 +57,7 @@ function App() {
   }
 
   const sendMessage = () => {
-    socket.emit('sendMessage', { number: number, message: message });
+    socket.emit('sendMessage', { clientId: session, number: number, message: message });
   }
 
   return (
@@ -103,7 +113,7 @@ function App() {
             Send Message
           </button>
         </div>
-      // {/* } */}
+      }
     </>
   )
 }
